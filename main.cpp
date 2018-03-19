@@ -13,6 +13,7 @@ class BST
 		node* right = NULL;
 	};
 	node* root = NULL;
+
 	node* insert(long long x, node* t)
 	{
 		if (t == NULL) {
@@ -26,53 +27,12 @@ class BST
 			t->right = insert(x, t->right);
 		return t;
 	}
-
-
-	node* findMin(node* t)
-	{
-		if (t == NULL)
-			return NULL;
-
-		if (t->left == NULL)
-			return t;
-		else
-			return findMin(t->left);
+	long long addBT(node* root) {
+		if (root == NULL)
+			return 0;
+		return root->data + addBT(root->left) + addBT(root->right);
 	}
 
-	node* deleteRecursivly(long long x, node* t)
-    {
-        node* temp;
-        if(t == NULL)
-            return NULL;
-        if(x < t->data)
-            t->left =deleteRecursivly(x, t->left);
-        else if(x > t->data)
-            t->right =deleteRecursivly(x, t->right);
-        else if(t->left && t->right)
-        {
-            temp = findMin(t->right);
-            t->data = temp->data;
-            t->right =deleteRecursivly(t->data, t->right);
-        }
-        else
-        {
-            temp = t;
-            if(t->left == NULL)
-                t = t->right;
-            else if(t->right == NULL)
-                t = t->left;
-            delete temp;
-        }
-        return t;
-    }
-
-	void preorder(node* t)
-	{
-		if (t == NULL) return;
-		cout << t->data << endl;
-		preorder(t->left);
-		preorder(t->right);
-	}
 public:
 	BST()
 	{
@@ -81,11 +41,8 @@ public:
 	void insert(long long x) {
 		root = insert(x, root);
 	}
-	void deleteRecursivly(long long x) {
-		root = deleteRecursivly(x, root);
-	}
-	void printToFile() {
-		this->preorder(root);
+	long long sum() {
+		return addBT(root);
 	}
 };
 
@@ -96,13 +53,10 @@ int main()
 
 	BST tree;
 	long long x = 0;
-	long long toDel = 0;
-	cin >> toDel;
 	while (cin >> x) {
 		tree.insert(x);
 	}
-	tree.deleteRecursivly(toDel);
-	tree.printToFile();
+	cout << tree.sum();
 
 	return 0;
 }
